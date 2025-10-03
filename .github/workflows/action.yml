@@ -89,7 +89,7 @@ jobs:
         run: |
           # 1. Use the GitHub Repository Contents API to get a list of files in the 'dist' folder.
           # The API returns a JSON array of objects for each file.
-          API_URL="https://api.github.com/repos/simplycodesmart/automate_quote_ai/dist"
+          API_URL="https://api.github.com/repos/simplycodesmart/automate_quote_ai/contents/dist"
           RESPONSE=$(curl -s -H "Authorization: token $GH_TOKEN" "$API_URL")
         
           # 2. Extract the download URL for the latest .whl file.
