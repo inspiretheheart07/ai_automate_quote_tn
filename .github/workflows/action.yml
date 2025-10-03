@@ -70,8 +70,15 @@ jobs:
             sudo apt update
             sudo apt install --fix-missing
 
+      # - name: Install FFmpeg
+      #   run: sudo apt-get install -y ffmpeg
+
       - name: Install FFmpeg
-        run: sudo apt-get install -y ffmpeg
+        uses: FedericoCarboni/setup-ffmpeg@v3
+        id: setup-ffmpeg
+        with:
+        # Optional: Specify a version. Omit this line to use the latest.
+         ffmpeg-version: "6.1.0"
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
@@ -82,7 +89,7 @@ jobs:
         run: |
           curl -L -H "Authorization: token $GH_TOKEN" \
             -o ai_automate_quote.whl \
-            https://github.com/<USERNAME>/<REPO>/raw/main/dist/ai_automate_quote-2.1.1-py3-none-any.whl
+            https://github.com/simplycodesmart/automate_quote_ai/raw/main/dist/ai_automate_quote-2.1.1-py3-none-any.whl
 
       - name: Install wheel
         run: |
