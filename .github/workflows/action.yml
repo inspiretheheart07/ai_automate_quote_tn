@@ -43,6 +43,28 @@ jobs:
         with:
           python-version: '3.11.0'
 
+      - name: Copy bg.png and font.ttf to working directory
+        run: |
+          cp assets/bg.png .
+          cp assets/font_tn.ttf .
+          cp assets/output_image.png .
+      
+      - name: Generate random number between 1 and 23
+        id: random_number
+        run: |
+          RANDOM_NUM=$((1 + RANDOM % 23))
+          echo "Random number is $RANDOM_NUM"
+          echo "number=$RANDOM_NUM" >> $GITHUB_OUTPUT
+
+      - name: Copy the randomly picked MP3
+        run: |
+          FILE="assets/music/${{ steps.random_number.outputs.number }}.mp3"
+          echo "Copying $FILE to current directory as random.mp3"
+          cp "$FILE" ./random.mp3
+
+      - name: List files for verification
+        run: ls -l
+
       - name: Set up apt
         run: |
             sudo apt update

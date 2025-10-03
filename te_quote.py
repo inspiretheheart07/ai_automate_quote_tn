@@ -48,7 +48,7 @@ def download_files(music):
     """Download necessary files from Google Drive."""
     download = DriveManager(json.loads(os.getenv('YT_JSON')), [os.getenv('DRIVE_LINK')])
     download.build_drive_service()
-    download.download_files([f"{music}.mp3", 'bg.png', 'font_te.ttf', 'output_image.png'])
+    download.download_files([f"{music}.mp3", 'bg.png', 'font_tn.ttf', 'output_image.png'])
 
 
 def generate_quote(env_vars):
@@ -61,7 +61,7 @@ def generate_quote(env_vars):
 def create_image_and_video(music):
     """Create image and video based on the generated quote."""
     with open("quote_data.json", "r", encoding="utf-8") as quote_data:
-        image = TextImageGenerator('bg.png', 'font_te.ttf', 'output_image.png')
+        image = TextImageGenerator('bg.png', 'font_tn.ttf', 'output_image.png')
         image.text_on_background(json.load(quote_data)['quote'])
         video = VideoCreator('output_image.png', f'{music}.mp3', output_video_path='output_video.mp4', duration=55)
         print((quote_data))
@@ -92,18 +92,18 @@ def upload_to_platforms(quote_data):
 
     fb = FacebookUploader(quote_data, os.getenv('FB_VERSION'), os.getenv('FB_PAGE_ID'), os.getenv('FB_PAGE_TOKEN'))
     fb.initialize_upload_session('output_video.mp4')
-    
+
     inst = InstagramUploader(quote_data, os.getenv('FB_VERSION'), os.getenv('INSTA_PAGE_ID'), os.getenv('INSTA_PAGE_TOKEN'))
     inst.post_reel(video_url='output_video.mp4')
     
-    th = ThreadsUploader(
-        quote_data,
-        os.getenv('THREADS_VERSION'),
-        os.getenv('S3_URL'),
-        os.getenv('THREADS_PAGE_ID'),
-        os.getenv('THREADS_PAGE_TOKEN')
-    )
-    th.threads_post()
+    # th = ThreadsUploader(
+    #     quote_data,
+    #     os.getenv('THREADS_VERSION'),
+    #     os.getenv('S3_URL'),
+    #     os.getenv('THREADS_PAGE_ID'),
+    #     os.getenv('THREADS_PAGE_TOKEN')
+    # )
+    # th.threads_post()
 
 
 def main():
