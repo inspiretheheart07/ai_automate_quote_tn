@@ -85,7 +85,7 @@ jobs:
 
       - name: Install latest wheel from private repo
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           sudo apt-get update && sudo apt-get install -y jq
           # 1. Use the GitHub Repository Contents API to get a list of files in the 'dist' folder.
