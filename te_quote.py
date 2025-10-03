@@ -2,7 +2,7 @@ import json
 import os
 import random
 from dotenv import load_dotenv
-
+import sys
 from ai_automate_quote.quotes.generator import QuoteGenerator
 from ai_automate_quote.images.creator import TextImageGenerator
 from ai_automate_quote.videos.creator import VideoCreator
@@ -12,6 +12,8 @@ from ai_automate_quote.upload.youtube import YouTubeUploader
 from ai_automate_quote.upload.facebook import FacebookUploader
 from ai_automate_quote.upload.instagram import InstagramUploader
 from ai_automate_quote.upload.threads_upload import ThreadsUploader
+
+random_number = int(sys.argv[1])
 
 
 def load_environment_variables():
@@ -107,7 +109,7 @@ def upload_to_platforms(quote_data):
 
 
 def main():
-        music = random.randint(101, 113)
+        music = random_number
         env_vars = load_environment_variables()
         download_files(music)
         generate_quote(env_vars)

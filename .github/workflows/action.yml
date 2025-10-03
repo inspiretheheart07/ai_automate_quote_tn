@@ -60,7 +60,7 @@ jobs:
         run: |
           FILE="assets/music/${{ steps.random_number.outputs.number }}.mp3"
           echo "Copying $FILE to current directory as random.mp3"
-          cp "$FILE" ./random.mp3
+          cp "$FILE" ./${{ steps.random_number.outputs.number }}.mp3
 
       - name: List files for verification
         run: ls -l
@@ -75,6 +75,18 @@ jobs:
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
+
+      - name: Download private wheel
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # or personal access token
+        run: |
+          curl -L -H "Authorization: token $GH_TOKEN" \
+            -o ai_automate_quote.whl \
+            https://github.com/<USERNAME>/<REPO>/raw/main/dist/ai_automate_quote-2.1.1-py3-none-any.whl
+
+      - name: Install wheel
+        run: |
+          pip install ai_automate_quote.whl
 
       - name: Install private repo manually using GitHub token
         env:
@@ -140,4 +152,6 @@ jobs:
           JSON_OAUTH_MAIN: ${{ secrets.JSON_OAUTH_YT }}  # Pass the secret here
 
       - name: Run Process
-        run: python te_quote.py
+        run: |
+          echo "Running te_quote.py with random number ${{ steps.random_number.outputs.number }}"
+          python te_quote.py "${{ steps.random_number.outputs.number }}"
