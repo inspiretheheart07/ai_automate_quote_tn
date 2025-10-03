@@ -83,23 +83,28 @@ jobs:
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      - name: Download private wheel
+      - name: Download latest wheel from private repo
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # or personal access token
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          curl -L -H "Authorization: token $GH_TOKEN" \
-            -o ai_automate_quote.whl \
-            https://github.com/simplycodesmart/automate_quote_ai/raw/main/dist/ai_automate_quote-2.1.1-py3-none-any.whl
+          # GitHub API URL for the dist folder
+          API_URL="https://api.github.com/repos/simplycodesmart/automate_quote_ai/contents/dist"
+          
+          # Get the download URL of the first .whl file dynamically
+          WHEEL_URL=$(curl -s -H "Authorization: token $GH_TOKEN" $API_URL \
+                      | grep -oP '"download_url": "\K.*\.whl(?=")' | head -n 1)
+          
+          echo "Downloading wheel from $WHEEL_URL"
+          curl -L -H "Authorization: token $GH_TOKEN" -o wheel.whl "$WHEEL_URL"
 
       - name: Install wheel
-        run: |
-          pip install ai_automate_quote.whl
+        run: pip install wheel.whl
 
-      - name: Install private repo manually using GitHub token
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          pip install git+https://$GH_TOKEN@github.com/simplycodesmart/automate_quote_ai.git
+      # - name: Install private repo manually using GitHub token
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      #   run: |
+      #     pip install git+https://$GH_TOKEN@github.com/simplycodesmart/automate_quote_ai.git
 
       - name: Install dependencies
         run: pip install -r requirements.txt
