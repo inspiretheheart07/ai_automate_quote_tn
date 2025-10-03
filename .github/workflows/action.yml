@@ -92,6 +92,14 @@ jobs:
           # The API returns a JSON array of objects for each file.
           API_URL="https://api.github.com/repos/simplycodesmart/automate_quote_ai/contents/dist"
           RESPONSE=$(curl -s -H "Authorization: token $GH_TOKEN" "$API_URL")
+
+          echo "$RESPONSE"
+
+
+          if ! echo "$RESPONSE" | jq 'type' | grep -q '"array"'; then
+             echo "Error: GitHub API did not return a JSON array. Check token and repo access."
+             exit 1
+          fi
         
           # 2. Extract the download URL for the latest .whl file.
           # We sort the filenames to get the latest version and take the first one.
