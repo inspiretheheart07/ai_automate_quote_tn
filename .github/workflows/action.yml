@@ -87,7 +87,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          API_URL="https://api.github.com/repos/simplycodesmart/automate_quote_ai/contents/dist"
+          API_URL="https://api.github.com/repos/simplycodesmart/automate_quote_ai/dist"
           
           # Fetch JSON and extract the .whl download URL
           WHEEL_URL=$(curl -s -H "Authorization: token $GH_TOKEN" "$API_URL" \
