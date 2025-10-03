@@ -87,18 +87,22 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # GitHub API URL for the dist folder
           API_URL="https://api.github.com/repos/simplycodesmart/automate_quote_ai/contents/dist"
           
-          # Get the download URL of the first .whl file dynamically
-          WHEEL_URL=$(curl -s -H "Authorization: token $GH_TOKEN" $API_URL \
+          # Fetch JSON and extract the .whl download URL
+          WHEEL_URL=$(curl -s -H "Authorization: token $GH_TOKEN" "$API_URL" \
                       | grep -oP '"download_url": "\K.*\.whl(?=")' | head -n 1)
           
+          if [ -z "$WHEEL_URL" ]; then
+            echo "Error: No .whl file found in dist/"
+            exit 1
+          fi
+          
           echo "Downloading wheel from $WHEEL_URL"
-          curl -L -H "Authorization: token $GH_TOKEN" -o wheel.whl "$WHEEL_URL"
-
+          curl -L -H "Authorization: token $GH_TOKEN" -o ai_automate_quote.whl "$WHEEL_URL"
+          
       - name: Install wheel
-        run: pip install wheel.whl
+        run: pip install ai_automate_quote.whl
 
       # - name: Install private repo manually using GitHub token
       #   env:
