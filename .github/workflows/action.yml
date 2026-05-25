@@ -129,9 +129,9 @@ jobs:
       # FFmpeg
       # -------------------------------------------------
       - name: Install FFmpeg
-        uses: FedericoCarboni/setup-ffmpeg@v3
+        uses: AnimMouse/setup-ffmpeg@v1
         with:
-          ffmpeg-version: "6.1.0"
+          version: "7.1"
 
       # -------------------------------------------------
       # Create auth files
